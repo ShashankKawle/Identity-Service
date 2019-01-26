@@ -25,6 +25,12 @@ namespace Identity_Service
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var builder = services.AddIdentityServer()
+                    .AddDeveloperSigningCredential()
+                    .AddInMemoryIdentityResources(Config.GetIdentityResources())
+                    .AddInMemoryApiResources(Config.GetApis())
+                    .AddInMemoryClients(Config.GetClients());
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -41,6 +47,7 @@ namespace Identity_Service
             }
 
             app.UseHttpsRedirection();
+            app.UseIdentityServer();
             app.UseMvc();
         }
     }
